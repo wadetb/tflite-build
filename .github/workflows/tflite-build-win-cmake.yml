@@ -1,11 +1,12 @@
-name: Build TensorFlow Lite for Windows w/ClangCL
-run-name: ${{ github.actor }} is building TensorFlow Lite for Windows w/ClangCL 🚀
+name: Build TensorFlow Lite for Windows w/CMake
+run-name: ${{ github.actor }} is building TensorFlow Lite for Windows w/CMake 🚀
 
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
 
-  Build-TFLite-Windows-ClangCL:
+  Build-TFLite-Windows-CMake:
     runs-on: windows-latest
     steps:
 
@@ -15,11 +16,8 @@ jobs:
             repository: tensorflow/tensorflow
             ref: v2.19.0         
 
-      # To use ClangCL, AVX flags must be disabled to work around the /vlen=256 issue:
-      #   https://github.com/llvm/llvm-project/issues/126888
-
       - run: mkdir tflite-build
-      - run: cmake -TClangCL -DXNNPACK_ENABLE_AVX256SKX=OFF -DXNNPACK_ENABLE_AVX256VNNI=OFF -DXNNPACK_ENABLE_AVX256VNNIGFNI=OFF ${{ github.workspace }}\tensorflow\lite\c
+      - run: cmake ${{ github.workspace }}\tensorflow\lite\c
         working-directory: tflite-build
       - run: cmake --build . -j
         working-directory: tflite-build

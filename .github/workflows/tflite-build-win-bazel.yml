@@ -1,0 +1,32 @@
+name: Build TensorFlow Lite for Windows w/Bazel
+run-name: ${{ github.actor }} is building TensorFlow Lite for Windows w/Bazel 🚀
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  Build-TFLite-Windows-Bazel:
+    runs-on: windows-latest
+    steps:
+
+      - name: Check out TensorFlow Lite repository
+        uses: actions/checkout@v4
+        with:
+            repository: tensorflow/tensorflow
+            ref: v2.19.0         
+
+      - run: bazelisk build -c opt //tensorflow/lite/c:tensorflowlite_c
+        working-directory: tensorflow
+
+      # - name: Dump exports
+      #   run: dumpbin tensorflow\Debug\tensorflowlite_c.dll /EXPORTS
+
+      # - name: Archive build artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: tensorflowlite_c
+      #     path: |
+      #       tflite-build\Debug\tensorflowlite_c.dll
+      #       tflite-build\Debug\tensorflowlite_c.lib
+      #       tflite-build\Debug\tensorflowlite_c.pdb
