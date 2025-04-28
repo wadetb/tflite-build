@@ -15,13 +15,8 @@ jobs:
             repository: tensorflow/tensorflow
             ref: v2.19.0         
 
-      - run: gci
-      - run: gci tensorflow
-      - run: gci tensorflow\tensorflow
-      - run: gci tensorflow\tensorflow\lite
-
       - run: mkdir tflite-build-win
-      - run: cmake ${{ github.workspace }}\tensorflow\tensorflow\lite\c
+      - run: cmake ${{ github.workspace }}\tensorflow\lite\c
         working-directory: tflite-build-win
 
       # To use ClangCL, AVX flags must be disabled to work around the /vlen=256 issue:
