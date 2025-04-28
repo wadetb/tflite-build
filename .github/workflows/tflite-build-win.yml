@@ -16,6 +16,9 @@ jobs:
             ref: v2.19.0         
 
       - run: gci
+      - run: gci tensorflow
+      - run: gci tensorflow\tensorflow
+      - run: gci tensorflow\tensorflow\lite
 
       - run: mkdir tflite-build-win
       - run: cmake ${{ github.workspace }}\tensorflow\tensorflow\lite\c
