@@ -19,14 +19,14 @@ jobs:
       - run: bazelisk build -c opt //tensorflow/lite/c:tensorflowlite_c
         working-directory: tensorflow
 
-      # - name: Dump exports
-      #   run: dumpbin tensorflow\Debug\tensorflowlite_c.dll /EXPORTS
+      - name: Dump exports
+        run: dumpbin bazel-bin/tensorflow/lite/c/tensorflowlite_c.dll /EXPORTS
 
-      # - name: Archive build artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: tensorflowlite_c
-      #     path: |
-      #       tflite-build\Debug\tensorflowlite_c.dll
-      #       tflite-build\Debug\tensorflowlite_c.lib
-      #       tflite-build\Debug\tensorflowlite_c.pdb
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tensorflowlite_c
+          path: |
+            bazel-bin/tensorflow/lite/c/tensorflowlite_c.dll
+            bazel-bin/tensorflow/lite/c/tensorflowlite_c.lib
+            bazel-bin/tensorflow/lite/c/tensorflowlite_c.pdb
