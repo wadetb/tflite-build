@@ -22,8 +22,8 @@ jobs:
       - run: cmake --build . -j
         working-directory: tflite-build
 
-      - name: Dump exports
-        run: dumpbin tflite-build\Debug\tensorflowlite_c.dll /EXPORTS
+      # - name: Dump exports
+      #   run: dumpbin tflite-build\Debug\tensorflowlite_c.dll /EXPORTS
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
