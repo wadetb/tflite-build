@@ -18,11 +18,13 @@ jobs:
       - run: mkdir tflite-build-win
       - run: cmake ${{ github.workspace }}\tensorflow\lite\c
         working-directory: tflite-build-win
+      - run: cmake --build . -j
+        working-directory: tflite-build-win
 
       # To use ClangCL, AVX flags must be disabled to work around the /vlen=256 issue:
       #   https://github.com/llvm/llvm-project/issues/126888
       # - run: mkdir tflite-build-win-clangcl
       # - run: cmake -TClangCL -DXNNPACK_ENABLE_AVX256SKX=OFF -DXNNPACK_ENABLE_AVX256VNNI=OFF -DXNNPACK_ENABLE_AVX256VNNIGFNI=OFF ..\tensorflow\tensorflow\lite\c
       #   working-directory: tflite-build-win-clangcl
-
-      - run: cmake --build . -j
+      # - run: cmake --build . -j
+      #   working-directory: tflite-build-win-clangcl
