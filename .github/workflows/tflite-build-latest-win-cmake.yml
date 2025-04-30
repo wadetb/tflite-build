@@ -10,6 +10,9 @@ jobs:
     runs-on: windows-latest
     steps:
 
+      - name: Debug
+        run: gci
+
       - name: Check out TensorFlow Lite repository
         uses: actions/checkout@v4
         with:
@@ -25,20 +28,20 @@ jobs:
           git apply ../tflite-build/0001-Force-TFLite-Windows-DLL-export.patch
         working-directory: tensorflow
 
-      - run: mkdir tflite-build
+      - run: mkdir build
       - run: cmake ${{ github.workspace }}\tensorflow\lite\c
-        working-directory: tflite-build
+        working-directory: build
       - run: cmake --build . -j
-        working-directory: tflite-build
+        working-directory: build
 
       # - name: Dump exports
-      #   run: dumpbin tflite-build\Debug\tensorflowlite_c.dll /EXPORTS
+      #   run: dumpbin build\Debug\tensorflowlite_c.dll /EXPORTS
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: tensorflowlite_c
           path: |
-            tflite-build\Debug\tensorflowlite_c.dll
-            tflite-build\Debug\tensorflowlite_c.lib
-            tflite-build\Debug\tensorflowlite_c.pdb
+            build\Debug\tensorflowlite_c.dll
+            build\Debug\tensorflowlite_c.lib
+            build\Debug\tensorflowlite_c.pdb
