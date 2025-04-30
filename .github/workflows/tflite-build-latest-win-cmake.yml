@@ -15,9 +15,14 @@ jobs:
         with:
             repository: tensorflow/tensorflow
 
+      - name: Check out TFLite-Build repository
+        uses: actions/checkout@v4
+        with:
+            repository: wadetb/tflite-build
+
       - name: Apply patches
         run: |
-          git apply ..\0001-Force-TFLite-Windows-DLL-export.patch
+          git apply ../tflite-build/0001-Force-TFLite-Windows-DLL-export.patch
         working-directory: tensorflow
 
       - run: mkdir tflite-build
