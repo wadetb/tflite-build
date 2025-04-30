@@ -17,7 +17,7 @@ jobs:
 
       - name: Apply patches
         run: |
-          git apply ../0001-Force-TFLite-Windows-DLL-export.patch
+          git apply ..\0001-Force-TFLite-Windows-DLL-export.patch
         working-directory: tensorflow
 
       - run: mkdir tflite-build
