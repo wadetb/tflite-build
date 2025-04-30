@@ -1,0 +1,30 @@
+From 7d29610bbb3d33e83ad5bd32236da23f63515c28 Mon Sep 17 00:00:00 2001
+From: Wade Brainerd <Wade.Brainerd@activision.com>
+Date: Wed, 30 Apr 2025 19:15:15 -0400
+Subject: [PATCH] Force TFLite Windows DLL export
+
+Even in static builds, TFLite produces a Windows DLL, and therefore the API requires the DLL export keyword.
+
+Without this keyword, no symbols are exported and the compiled DLL is useless.
+
+Did not investigate whether TFL_STATIC_LIBRARY_BUILD is being set improperly by CMake.
+---
+ tensorflow/lite/core/c/c_api_types.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tensorflow/lite/core/c/c_api_types.h b/tensorflow/lite/core/c/c_api_types.h
+index 1fe66a47c14..5726f4b0bdc 100644
+--- a/tensorflow/lite/core/c/c_api_types.h
++++ b/tensorflow/lite/core/c/c_api_types.h
+@@ -55,7 +55,7 @@ extern "C" {
+ #ifdef SWIG
+ #define TFL_CAPI_EXPORT
+ #elif defined(TFL_STATIC_LIBRARY_BUILD)
+-#define TFL_CAPI_EXPORT
++#define TFL_CAPI_EXPORT  __declspec(dllexport) // wadetb: patched to force for Windows DLL export
+ #else  // not defined TFL_STATIC_LIBRARY_BUILD
+ #if defined(_WIN32)
+ #ifdef TFL_COMPILE_LIBRARY
+-- 
+2.47.0.windows.2
+

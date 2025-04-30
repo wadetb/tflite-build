@@ -16,6 +16,11 @@ jobs:
             repository: tensorflow/tensorflow
             ref: v2.19.0         
 
+      - name: Apply patches
+        run: |
+          git apply ../0001-Force-TFLite-Windows-DLL-export.patch
+        working-directory: tensorflow
+
       - run: mkdir tflite-build
       - run: cmake ${{ github.workspace }}\tensorflow\lite\c
         working-directory: tflite-build

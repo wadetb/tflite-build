@@ -1,0 +1,43 @@
+name: Build TensorFlow Lite for Windows w/CMake + ClangCL
+run-name: ${{ github.actor }} is building TensorFlow Lite for Windows w/CMake + ClangCL 🚀
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  Build-TFLite-Windows-CMake-ClangCL:
+    runs-on: windows-latest
+    steps:
+
+      - name: Check out TensorFlow Lite repository
+        uses: actions/checkout@v4
+        with:
+            repository: tensorflow/tensorflow
+            ref: v2.19.0         
+
+      - name: Apply patches
+        run: |
+          git apply ../0001-Force-TFLite-Windows-DLL-export.patch
+        working-directory: tensorflow
+
+      # To use ClangCL, AVX flags must be disabled to work around the /vlen=256 issue:
+      #   https://github.com/llvm/llvm-project/issues/126888
+
+      - run: mkdir tflite-build
+      - run: cmake -TClangCL -DXNNPACK_ENABLE_AVX256SKX=OFF -DXNNPACK_ENABLE_AVX256VNNI=OFF -DXNNPACK_ENABLE_AVX256VNNIGFNI=OFF ${{ github.workspace }}\tensorflow\lite\c
+        working-directory: tflite-build
+      - run: cmake --build . -j
+        working-directory: tflite-build
+
+      # - name: Dump exports
+      #   run: dumpbin tflite-build\Debug\tensorflowlite_c.dll /EXPORTS
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tensorflowlite_c
+          path: |
+            tflite-build\Debug\tensorflowlite_c.dll
+            tflite-build\Debug\tensorflowlite_c.lib
+            tflite-build\Debug\tensorflowlite_c.pdb
