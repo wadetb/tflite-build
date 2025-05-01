@@ -1,4 +1,4 @@
-name: Build TensorFlow Lite for Windows w/CMake
+name: Build TensorFlow Lite for Windows
 run-name: ${{ github.actor }} is building TensorFlow Lite for Windows w/CMake 🚀
 
 on:
@@ -9,17 +9,8 @@ jobs:
   Build-TFLite-Windows-CMake:
     runs-on: windows-latest
     steps:
-
-      - name: Show workspace 1
-        run: Get-ChildItem ${{ github.workspace }}
-
       - name: Check out TFLite-Build repository
         uses: actions/checkout@v4
-        with:
-          repository: wadetb/tflite-build
-
-      - name: Show workspace 1a
-        run: Get-ChildItem ${{ github.workspace }}
 
       - name: Check out TensorFlow repository
         uses: actions/checkout@v4
@@ -27,23 +18,30 @@ jobs:
           repository: tensorflow/tensorflow
           path: tensorflow
 
-      - name: Show workspace 2
-        run: Get-ChildItem ${{ github.workspace }}
-
-      - name: Show workspace 3
-        run: Get-ChildItem ${{ github.workspace }}
-
       - name: Apply patches
         run: git apply ${{ github.workspace }}\0001-Force-TFLite-Windows-DLL-export.patch
         working-directory: tensorflow
 
-      - run: mkdir build
+      #
+      # To use Bazel
+      #
+      - run: bazelisk build -c opt //tensorflow/lite/c:tensorflowlite_c
+        working-directory: tensorflow
 
-      - run: cmake ${{ github.workspace }}\tensorflow\tensorflow\lite\c
-        working-directory: build
-
-      - run: cmake --build . -j
-        working-directory: build
+      #
+      # To use CMake
+      #
+      # - run: mkdir build
+      # To use ClangCL, AVX flags must be disabled to work around the /vlen=256 issue:
+      #   https://github.com/llvm/llvm-project/issues/126888
+      # - run: |
+      #     cmake -TClangCL \
+      #       -DXNNPACK_ENABLE_AVX256SKX=OFF -DXNNPACK_ENABLE_AVX256VNNI=OFF -DXNNPACK_ENABLE_AVX256VNNIGFNI=OFF \
+      #       ${{ github.workspace }}\tensorflow\tensorflow\lite\c
+      # - run: cmake ${{ github.workspace }}\tensorflow\tensorflow\lite\c
+      #   working-directory: build
+      # - run: cmake --build . --target RelWithDebInfo -j
+      #   working-directory: build
 
       # - name: Dump exports
       #   run: dumpbin build\Debug\tensorflowlite_c.dll /EXPORTS
