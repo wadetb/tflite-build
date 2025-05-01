@@ -10,32 +10,34 @@ jobs:
     runs-on: windows-latest
     steps:
 
-      - name: Debug
-        shell: pwsh
-        run: Get-ChildItem .
+      - name: Show workspace
+        run: Get-ChildItem ${{ github.workspace }}
 
-      - name: Check out TensorFlow Lite repository
+      - name: Check out TensorFlow repository
         uses: actions/checkout@v4
         with:
             repository: tensorflow/tensorflow
+
+      - name: Show workspace
+        run: Get-ChildItem ${{ github.workspace }}
 
       - name: Check out TFLite-Build repository
         uses: actions/checkout@v4
         with:
             repository: wadetb/tflite-build
 
-      - name: Debug
-        shell: pwsh
-        run: Get-ChildItem .
+      - name: Show workspace
+        run: Get-ChildItem ${{ github.workspace }}
 
       - name: Apply patches
-        run: |
-          git apply ../tflite-build/0001-Force-TFLite-Windows-DLL-export.patch
+        run: git apply ${{ github.workspace }}\tflite-build\0001-Force-TFLite-Windows-DLL-export.patch
         working-directory: tensorflow
 
       - run: mkdir build
+
       - run: cmake ${{ github.workspace }}\tensorflow\lite\c
         working-directory: build
+
       - run: cmake --build . -j
         working-directory: build
 
