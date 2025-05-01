@@ -51,9 +51,9 @@ jobs:
         with:
           name: tensorflowlite_c
           path: |
-            bazel-bin/tensorflow/tensorflow/lite/c/tensorflowlite_c.dll
-            bazel-bin/tensorflow/tensorflow/lite/c/tensorflowlite_c.lib
-            bazel-bin/tensorflow/tensorflow/lite/c/tensorflowlite_c.pdb
+            tensorflow/bazel-bin/tensorflow/lite/c/tensorflowlite_c.dll
+            tensorflow/bazel-bin/tensorflow/lite/c/tensorflowlite_c.lib
+            tensorflow/bazel-bin/tensorflow/lite/c/tensorflowlite_c.pdb
 
       # - name: Archive build artifacts
       #   uses: actions/upload-artifact@v4
