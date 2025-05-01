@@ -2,7 +2,7 @@ name: Build TensorFlow Lite for Windows
 run-name: ${{ github.actor }} is building TensorFlow Lite for Windows w/CMake 🚀
 
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   build-tflite-win:
