@@ -5,8 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-
-  Build-TFLite-Windows-CMake:
+  build-tflite-win:
     runs-on: windows-latest
     steps:
       - name: Check out TFLite-Build repository
@@ -16,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: tensorflow/tensorflow
+          ref: 2.19.0
           path: tensorflow
 
       - name: Apply patches
