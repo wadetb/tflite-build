@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: tensorflow/tensorflow
-          ref: 2.19.0
+          ref: v2.19.0
           path: tensorflow
 
       - name: Apply patches
